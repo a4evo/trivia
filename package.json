@@ -4,7 +4,7 @@
   "description": "trivia game",
   "scripts": {
     "start:ng": "cd ng-trivia && npm run-script start",
-    "start:nest": "cd nest-trivia && npm run-script start",
+    "start:nest": "cd nest-trivia && npm i && npm run-script start",
     "start:nest:dev": "cd nest-trivia && npm run-script start:dev"
   },
   "author": "",
