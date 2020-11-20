@@ -1,33 +1,35 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { of } from 'rxjs';
 import { QuestionsService } from './services/questions.service';
 import { SubmitResultDto } from './dto/submit-result.dto';
 import { StatsService } from './services/stats.service';
+import { QuestionStatsDto } from './dto/question-stats.dto';
+import { PlayersStatsDto } from './dto/players-stats.dto';
+import { map } from 'rxjs/operators';
 
 @Controller('quiz')
 export class QuizController {
-
-  constructor(private readonly questionsService: QuestionsService,
-              private readonly statsService: StatsService) {
-  }
+  constructor(
+    private readonly questionsService: QuestionsService,
+    private readonly statsService: StatsService,
+  ) {}
 
   @Get()
   getQuestions() {
     return this.questionsService.getQuestions();
   }
 
+  @Post()
+  submitResult(@Body() result: SubmitResultDto) {
+    return this.statsService.submitResult(result).pipe(map(() => null));
+  }
+
   @Get('player-stats')
-  getPlayerStats() {
-    return of([1, 2, 4]);
+  getPlayerStats(): Promise<PlayersStatsDto[]> {
+    return this.statsService.getPlayersStats();
   }
 
   @Get('question-stats')
-  getQuestionStats() {
-    return of([1, 2, 4]);
-  }
-
-  @Post()
-  submitResult(@Body() result: SubmitResultDto) {
-    return this.statsService.submitResult(result);
+  getQuestionStats(): Promise<QuestionStatsDto[]> {
+    return this.statsService.getQuestionsStats();
   }
 }
