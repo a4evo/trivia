@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
 import { StartComponent } from './start/start.component';
 import { MatButtonModule } from '@angular/material/button';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { MatButtonModule } from '@angular/material/button';
     HttpClientModule,
     MatCardModule,
     MatButtonModule,
+    StoreModule.forRoot({}, {}),
   ],
   providers: [],
   bootstrap: [AppComponent]
