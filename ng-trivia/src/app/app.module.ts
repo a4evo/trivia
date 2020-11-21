@@ -9,6 +9,10 @@ import { MatCardModule } from '@angular/material/card';
 import { StartComponent } from './start/start.component';
 import { MatButtonModule } from '@angular/material/button';
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
+import { QuizState } from './game/store/quiz.reducer';
 
 @NgModule({
   declarations: [
@@ -23,6 +27,8 @@ import { StoreModule } from '@ngrx/store';
     MatCardModule,
     MatButtonModule,
     StoreModule.forRoot({}, {}),
+    EffectsModule.forRoot([]),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
   ],
   providers: [],
   bootstrap: [AppComponent]

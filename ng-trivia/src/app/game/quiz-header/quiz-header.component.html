@@ -1,0 +1,5 @@
+<div class="header">
+  <div>LIVES: {{ lives$ | async }}</div>
+  <div *ngIf="questionNumberOf$ | async as numberOf">{{ numberOf.current }} / {{ numberOf.total }}</div>
+  <div>SCORE: {{ score$ | async }}</div>
+</div>

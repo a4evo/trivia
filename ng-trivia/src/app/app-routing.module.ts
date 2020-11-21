@@ -4,6 +4,7 @@ import { StartComponent } from './start/start.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: StartComponent },
+  { path: 'quiz', loadChildren: () => import('./game/quiz.module').then(m => m.QuizModule) },
   { path: 'rating', loadChildren: () => import('./rating/rating.module').then(m => m.RatingModule) },
 ];
 
