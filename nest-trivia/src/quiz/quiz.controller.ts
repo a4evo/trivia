@@ -5,6 +5,8 @@ import { StatsService } from './services/stats.service';
 import { QuestionStatsDto } from './dto/question-stats.dto';
 import { PlayersStatsDto } from './dto/players-stats.dto';
 import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { QuestionDto } from './dto/question.dto';
 
 @Controller('quiz')
 export class QuizController {
@@ -14,7 +16,7 @@ export class QuizController {
   ) {}
 
   @Get()
-  getQuestions() {
+  getQuestions(): Observable<QuestionDto[]> {
     return this.questionsService.getQuestions();
   }
 

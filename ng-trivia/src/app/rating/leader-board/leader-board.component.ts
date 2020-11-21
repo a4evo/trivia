@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RatingService } from '../rating.service';
 import { Observable } from 'rxjs';
-import { LeaderBoardEntry } from '../models/leader-board-entry.interface';
+import { LeaderBoardEntry } from '../models/leader-board-entry.model';
 
 @Component({
   selector: 'app-leader-board',

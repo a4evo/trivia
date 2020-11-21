@@ -1,0 +1,14 @@
+mat-list-item.mat-list-item {
+  height: auto;
+  padding: 15px 0;
+
+  .question {
+    flex-basis: 64%;
+  }
+
+  div:not(.question) {
+    flex-basis: 12%;
+    padding-left: 5px;
+    text-align: right;
+  }
+}

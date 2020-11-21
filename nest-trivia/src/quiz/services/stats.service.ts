@@ -53,6 +53,17 @@ export class StatsService {
             success: { $sum: { $cond: ['$correct', 1, 0] } },
           },
         },
+        {
+          $addFields: {
+            question: '$_id',
+            fail: { $subtract: ['$attempts', '$success'] },
+          },
+        },
+        {
+          $project: {
+            _id: false,
+          },
+        },
       ])
       .sort({ attempts: -1, success: -1 })
       .limit(10)

@@ -9,18 +9,20 @@ export class QuestionsService {
   constructor(private readonly http: HttpService) {}
 
   private static toDto(val: OpendbQuestionDto): QuestionDto {
+    const correct_answer = decodeURIComponent(val.correct_answer);
     return {
-      question: val.question,
-      correct_answer: val.correct_answer,
-      answers: [...val.incorrect_answers, val.correct_answer].sort(
-        () => Math.random() - Math.random(),
-      ),
+      question: decodeURIComponent(val.question),
+      correct_answer,
+      answers: val.incorrect_answers
+        .map((answer) => decodeURIComponent(answer))
+        .concat(correct_answer)
+        .sort(() => Math.random() - Math.random()),
     };
   }
 
   getQuestions(): Observable<QuestionDto[]> {
     return this.http
-      .get(`https://opentdb.com/api.php?amount=10&type=multiple`)
+      .get(`https://opentdb.com/api.php?amount=10&type=multiple&encode=url3986`)
       .pipe(
         map((res) =>
           (res.data.results as OpendbQuestionDto[]).map((v) =>
