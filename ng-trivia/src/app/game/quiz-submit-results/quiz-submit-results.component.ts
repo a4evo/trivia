@@ -12,9 +12,11 @@ import { Router } from '@angular/router';
 })
 export class QuizSubmitResultsComponent implements OnInit {
 
-  score: number;
-  correctAnswers: number;
-  totalQuestions: number;
+  results: {
+    score: number;
+    correctAnswers: number;
+    totalQuestions: number;
+  };
   name: any;
 
   constructor(private store: Store, private service: QuizService, private router: Router) { }
@@ -22,10 +24,8 @@ export class QuizSubmitResultsComponent implements OnInit {
   ngOnInit(): void {
     this.store.select(selectFinalResult)
       .pipe(take(1))
-      .subscribe(({ score, correctAnswers, totalQuestion }) => {
-        this.score = score;
-        this.totalQuestions = totalQuestion;
-        this.correctAnswers = correctAnswers;
+      .subscribe((res) => {
+        this.results = res;
     });
   }
 

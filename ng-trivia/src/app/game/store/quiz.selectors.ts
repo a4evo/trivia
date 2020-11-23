@@ -20,6 +20,11 @@ export const selectQuestionNumberOf = createSelector(
   })
 );
 
+export const selectIfGameIsOver = createSelector(
+  selectQuizState,
+  ({ lives, currentQuestion, questions }: QuizState) => lives < 0 || (questions.length && currentQuestion > questions.length)
+);
+
 export const selectScore = createSelector(
   selectQuizState,
   (state: QuizState) => state.score
@@ -27,7 +32,7 @@ export const selectScore = createSelector(
 
 export const selectCurrentQuestion = createSelector(
   selectQuizState,
-  (state: QuizState) => state.questions[state.currentQuestion]
+  ({ questions, currentQuestion }: QuizState) => ({ question: questions[currentQuestion], currentQuestion: currentQuestion + 1  })
 );
 
 export const selectFinalResult = createSelector(
@@ -35,7 +40,7 @@ export const selectFinalResult = createSelector(
   ({ score, questions, correctAnswers }: QuizState) => ({
     score,
     correctAnswers,
-    totalQuestion: questions.length
+    totalQuestions: questions.length
   })
 );
 

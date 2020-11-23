@@ -16,10 +16,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { QuizSubmitResultsComponent } from './quiz-submit-results/quiz-submit-results.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { QuizTimerComponent } from './quiz-timer/quiz-timer.component';
 
 
 @NgModule({
-  declarations: [QuizComponent, QuizHeaderComponent, QuizQuestionComponent, QuizSubmitResultsComponent],
+  declarations: [QuizComponent, QuizHeaderComponent, QuizQuestionComponent, QuizSubmitResultsComponent, QuizTimerComponent],
   imports: [
     CommonModule,
     QuizRoutingModule,

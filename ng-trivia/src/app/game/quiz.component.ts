@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { gameOver, startQuiz } from './store/quiz.actions';
-import { combineLatest } from 'rxjs';
-import { selectLives, selectQuestionNumberOf } from './store/quiz.selectors';
+import { selectIfGameIsOver } from './store/quiz.selectors';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -22,12 +21,8 @@ export class QuizComponent implements OnInit {
   }
 
   subscribeOnGameOver(): void {
-    const subs$ = combineLatest([
-      this.store.select(selectQuestionNumberOf),
-      this.store.select(selectLives),
-    ]).subscribe(([numberOf, lives]) => {
-      const isLast = numberOf.total && numberOf.current > numberOf.total;
-      if (lives < 0 || isLast) {
+    const subs$ = this.store.select(selectIfGameIsOver).subscribe((res) => {
+      if (res) {
         subs$.unsubscribe();
         this.router.navigate(['game-over'], { relativeTo: this.route }).then(() => this.store.dispatch(gameOver()));
       }
