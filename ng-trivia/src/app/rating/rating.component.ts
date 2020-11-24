@@ -7,7 +7,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./rating.component.scss']
 })
 export class RatingComponent implements OnInit {
-  activeLink: any;
+
+  activeLink: string;
+
   links = [
     { path: 'leader', label: 'LEADER BOARD' },
     { path: 'question', label: 'QUESTION BOARD' }

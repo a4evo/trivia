@@ -14,7 +14,11 @@ import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
-  declarations: [LeaderBoardComponent, QuestionBoardComponent, RatingComponent],
+  declarations: [
+    RatingComponent,
+    LeaderBoardComponent,
+    QuestionBoardComponent,
+  ],
   imports: [
     CommonModule,
     RatingRoutingModule,
