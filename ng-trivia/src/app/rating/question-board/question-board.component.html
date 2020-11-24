@@ -1,0 +1,18 @@
+<mat-action-list *ngIf="data$ | async as data">
+  <mat-list-item>
+    <div class="question">Question</div>
+    <div>Answered</div>
+    <div>Right</div>
+    <div>Wrong</div>
+  </mat-list-item>
+
+  <mat-list-item *ngFor="let item of data; let i = index">
+    <div class="question">{{i + 1}}. {{ item.question }}</div>
+    <div>{{ item.attempts | number }}</div>
+    <div>{{ item.success/item.attempts | percent }}</div>
+    <div>{{ item.fail/item.attempts | percent }}</div>
+  </mat-list-item>
+
+  <mat-list-item *ngIf="!data.length">No questions yet</mat-list-item>
+
+</mat-action-list>

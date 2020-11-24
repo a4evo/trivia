@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PlayerStatsEntity } from '../entities/player-stats.entity';
 import { MongoRepository } from 'typeorm';
 import { QuestionStatsEntity } from '../entities/question-stats.entity';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
 import { QuestionStatsDto } from '../dto/question-stats.dto';
 import { PlayersStatsDto } from '../dto/players-stats.dto';
 
@@ -33,6 +33,9 @@ export class StatsService {
   }
 
   private submitQuestionsStats(result: SubmitResultDto) {
+    if (!result.answers?.length) {
+      return of(true);
+    }
     return this.questionStatsRepository.insertMany(result.answers);
   }
 
@@ -51,6 +54,17 @@ export class StatsService {
             _id: '$question',
             attempts: { $sum: 1 },
             success: { $sum: { $cond: ['$correct', 1, 0] } },
+          },
+        },
+        {
+          $addFields: {
+            question: '$_id',
+            fail: { $subtract: ['$attempts', '$success'] },
+          },
+        },
+        {
+          $project: {
+            _id: false,
           },
         },
       ])

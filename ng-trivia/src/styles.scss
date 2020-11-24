@@ -1,1 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: #2a2a58}
+
+
+.mat-typography h1 {
+  width: 100%;
+  text-align: center;
+  font-size: 3em;
+  margin: 40px 5px;
+  font-weight: 600;
+}
+
+h2 {
+  width: 100%;
+  text-align: center;
+}
+
+p {
+  font-size: 1.5em;
+  font-weight: 500;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
