@@ -3,9 +3,19 @@ import { AppState, quizFeatureKey, QuizState } from './quiz.reducer';
 
 export const selectQuizState = createFeatureSelector<AppState, QuizState>(quizFeatureKey);
 
-export const selectQuestions = createSelector(
+export const selectQuestion = createSelector(
   selectQuizState,
-  (state: QuizState) => state.questions
+  ({ questions, currentQuestion }: QuizState) => questions[currentQuestion]
+);
+
+export const selectStatus = createSelector(
+  selectQuizState,
+  (state: QuizState) => state.status
+);
+
+export const selectCurrentQuestionIndex = createSelector(
+  selectQuizState,
+  ({ currentQuestion }: QuizState) => currentQuestion
 );
 
 export const selectLives = createSelector(
@@ -22,7 +32,7 @@ export const selectQuestionNumberOf = createSelector(
 
 export const selectIfGameIsOver = createSelector(
   selectQuizState,
-  ({ lives, currentQuestion, questions }: QuizState) => lives < 0 || (questions.length && currentQuestion > questions.length)
+  ({ lives, currentQuestion, questions }: QuizState) => lives < 0 || (questions.length && currentQuestion >= questions.length)
 );
 
 export const selectScore = createSelector(
@@ -30,23 +40,14 @@ export const selectScore = createSelector(
   (state: QuizState) => state.score
 );
 
-export const selectCurrentQuestion = createSelector(
-  selectQuizState,
-  ({ questions, currentQuestion }: QuizState) => ({ question: questions[currentQuestion], currentQuestion: currentQuestion + 1  })
-);
 
 export const selectFinalResult = createSelector(
   selectQuizState,
-  ({ score, questions, correctAnswers }: QuizState) => ({
+  ({ score, questions, correctAnswers, answers }: QuizState) => ({
     score,
+    answers,
     correctAnswers,
     totalQuestions: questions.length
   })
 );
 
-export const selectResultForSubmit = createSelector(
-  selectQuizState,
-  ({  score, answers }: QuizState) => ({
-    score, answers
-  })
-);

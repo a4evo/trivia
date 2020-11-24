@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PlayerStatsEntity } from '../entities/player-stats.entity';
 import { MongoRepository } from 'typeorm';
 import { QuestionStatsEntity } from '../entities/question-stats.entity';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
 import { QuestionStatsDto } from '../dto/question-stats.dto';
 import { PlayersStatsDto } from '../dto/players-stats.dto';
 
@@ -33,6 +33,9 @@ export class StatsService {
   }
 
   private submitQuestionsStats(result: SubmitResultDto) {
+    if (!result.answers?.length) {
+      return of(true);
+    }
     return this.questionStatsRepository.insertMany(result.answers);
   }
 

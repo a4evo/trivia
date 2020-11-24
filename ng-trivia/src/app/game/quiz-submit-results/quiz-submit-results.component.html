@@ -1,12 +1,13 @@
-<h2>GAME OVER</h2>
+<h1>GAME OVER</h1>
+<div class="container">
+  <p>You answered on {{ results.correctAnswers }} of {{ results.totalQuestions }}</p>
 
-<div>You answered on {{ results.correctAnswers }} of {{ results.totalQuestions }}</div>
+  <p>Your score: {{ results.score }}</p>
 
-<div>Your score: {{ results.score }}</div>
+  <mat-form-field appearance="outline">
+    <mat-label>Enter Your Name</mat-label>
+    <input matInput [(ngModel)]="name" required>
+  </mat-form-field>
 
-<mat-form-field appearance="outline">
-  <mat-label>Enter Your Name</mat-label>
-  <input matInput [(ngModel)]="name">
-</mat-form-field>
-
-<button mat-raised-button color="primary" (click)="submitResult()">SUBMIT</button>
+  <button mat-raised-button color="accent" (click)="submitResult()">SAVE</button>
+</div>

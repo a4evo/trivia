@@ -12,8 +12,16 @@ export const setQuestions = createAction(
   }>()
 );
 
+export const goToNextQuestion = createAction(
+  '[Quiz] Go to next question'
+);
+
 export const skipQuestion = createAction(
   '[Quiz] Skip question'
+);
+
+export const timeRunOut = createAction(
+  '[Quiz] Time for answer the question run out'
 );
 
 export const submitAnswer = createAction(

@@ -8,16 +8,21 @@ import { RatingService } from './rating.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
+import { RatingComponent } from './rating.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
-  declarations: [LeaderBoardComponent, QuestionBoardComponent],
+  declarations: [LeaderBoardComponent, QuestionBoardComponent, RatingComponent],
   imports: [
     CommonModule,
     RatingRoutingModule,
     MatCardModule,
     MatListModule,
     MatIconModule,
+    MatTabsModule,
+    MatButtonModule,
   ],
   providers: [
     RatingService,

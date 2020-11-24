@@ -17,6 +17,7 @@ import { QuizSubmitResultsComponent } from './quiz-submit-results/quiz-submit-re
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { QuizTimerComponent } from './quiz-timer/quiz-timer.component';
+import { MatBadgeModule } from '@angular/material/badge';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { QuizTimerComponent } from './quiz-timer/quiz-timer.component';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    MatBadgeModule,
   ],
   providers: [
     QuizService,

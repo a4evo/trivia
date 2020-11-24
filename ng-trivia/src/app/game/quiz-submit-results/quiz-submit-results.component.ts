@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectFinalResult, selectResultForSubmit } from '../store/quiz.selectors';
-import { switchMap, take } from 'rxjs/operators';
+import { selectFinalResult } from '../store/quiz.selectors';
+import { take } from 'rxjs/operators';
 import { QuizService } from '../quiz.service';
 import { Router } from '@angular/router';
+import { QuizSubmitModel } from '../models/quiz-submit.model';
 
 @Component({
   selector: 'app-quiz-submit-results',
@@ -12,28 +13,27 @@ import { Router } from '@angular/router';
 })
 export class QuizSubmitResultsComponent implements OnInit {
 
-  results: {
-    score: number;
-    correctAnswers: number;
-    totalQuestions: number;
-  };
-  name: any;
+  results: QuizSubmitModel;
+  name: string;
 
-  constructor(private store: Store, private service: QuizService, private router: Router) { }
+  constructor(private store: Store, private service: QuizService, private router: Router) {
+  }
 
   ngOnInit(): void {
     this.store.select(selectFinalResult)
       .pipe(take(1))
       .subscribe((res) => {
         this.results = res;
-    });
+      });
   }
 
   submitResult(): void {
-    this.store.select(selectResultForSubmit).pipe(
-      switchMap(res => this.service.submitAnswer({...res, name: this.name.trim()}))
-    ).subscribe(res => {
-      this.router.navigate(['rating', 'leader']);
+    this.service.submitAnswer({
+      name: this.name.trim(),
+      score: this.results.score,
+      answers: this.results.answers,
+    }).subscribe(() => {
+      this.router.navigate(['rating']);
     });
   }
 }

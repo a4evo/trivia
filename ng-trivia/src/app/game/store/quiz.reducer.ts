@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { ActionReducer } from '@ngrx/store/src/models';
-import { gameOver, setQuestions, skipQuestion, startQuiz, submitAnswer } from './quiz.actions';
+import * as QuizActions from './quiz.actions';
 import { QuestionModel } from '../models/question.model';
 import { AnswerModel } from '../models/answer.model';
 
@@ -10,7 +10,10 @@ export interface AppState {
   quiz?: QuizState;
 }
 
+export type QuizStatus = 'TIMER' | 'TIME_IS_OUT' | 'SUBMITTED_RIGHT' | 'SUBMITTED_WRONG' | 'SKIPPED' | 'GAME_OVER';
+
 export interface QuizState {
+  status: QuizStatus | null;
   lives: number;
   questions: QuestionModel[];
   currentQuestion: number;
@@ -20,6 +23,7 @@ export interface QuizState {
 }
 
 export const initialQuizState: QuizState = {
+  status: null,
   lives: 3,
   questions: [],
   currentQuestion: -1,
@@ -30,27 +34,37 @@ export const initialQuizState: QuizState = {
 
 const _quizReducer: ActionReducer<QuizState> = createReducer(
   initialQuizState,
-  on(setQuestions, (state, { questions }) => ({
+  on(QuizActions.setQuestions, (state, { questions }) => ({
     ...state,
     questions: [...questions]
   })),
-  on(startQuiz, () => ({ ...initialQuizState, currentQuestion: 0 })),
-  on(skipQuestion, (state) => ({
+  on(QuizActions.startQuiz, () => ({ ...initialQuizState })),
+  on(QuizActions.skipQuestion, (state) => ({
     ...state,
     lives: state.lives - 1,
-    currentQuestion: state.currentQuestion + 1
+    status: 'SKIPPED'
   })),
-  on(submitAnswer, (state, { question, correct }) => ({
+  on(QuizActions.timeRunOut, (state) => ({
     ...state,
-    currentQuestion: state.currentQuestion + 1,
+    lives: state.lives - 1,
+    status: 'TIME_IS_OUT'
+  })),
+  on(QuizActions.submitAnswer, (state, { question, correct }) => ({
+    ...state,
+    status: correct ? 'SUBMITTED_RIGHT' : 'SUBMITTED_WRONG',
     score: correct ? state.score + 100 : state.score,
     lives: correct ? state.lives : state.lives - 1,
     answers: [...state.answers, { question, correct }],
     correctAnswers: correct ? state.correctAnswers + 1 : state.correctAnswers
   })),
-  on(gameOver, state => ({
+  on(QuizActions.goToNextQuestion, (state) => ({
     ...state,
-    currentQuestion: -1,
+    currentQuestion: state.currentQuestion + 1,
+    status: 'TIMER'
+  })),
+  on(QuizActions.gameOver, state => ({
+    ...state,
+    status: 'GAME_OVER',
     score: state.score + (state.lives + 1) * 500
   })),
   )

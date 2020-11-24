@@ -1,33 +1,36 @@
 <div class="container" *ngIf="question">
 
-  <h2>Q{{ questionNumber }}: {{ question.question }}</h2>
+  <h2>Q{{ questionIndex + 1 }}: {{ question.question }}</h2>
+
   <app-quiz-timer></app-quiz-timer>
+
   <div class="answers">
     <div *ngFor="let answer of question.answers; let i = index" class="answer">
 
       <button mat-raised-button (click)="selectValue(answer)"
-              [disabled]="!!status"
+              [disabled]="disableButtons"
               [color]="selectedAnswer === answer ? 'accent' : null">
-        <mat-icon color="warn" *ngIf="selectedAnswer === answer && status === 'WRONG'">close</mat-icon>
+        <ng-container *ngIf="selectedAnswer === answer">
+          <mat-icon color="warn" *ngIf="status === 'SUBMITTED_WRONG'">close</mat-icon>
+          <mat-icon color="primary" *ngIf="status === 'SUBMITTED_RIGHT'">check</mat-icon>
+        </ng-container>
         {{ answer }}
       </button>
 
     </div>
   </div>
 
-  <div class="message success-message" *ngIf="status === 'RIGHT'">
-    WELL DONE!
-  </div>
-
-  <div class="message fail-message" *ngIf="status === 'WRONG'">
-    WRONG!
+  <div class="message" *ngIf="status && messages[status]">
+    {{ messages[status] }}
   </div>
 
   <div class="actions">
-    <button mat-raised-button color="primary" (click)="submit()" [disabled]="!selectedAnswer || !!status">OK</button>
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="!selectedAnswer || disableButtons">OK</button>
     <ng-container *ngIf="attempts$ | async as attempts">
-      <button mat-raised-button color="accent" (click)="skip()" [disabled]="!!status">Skip</button>
-      <p>Remaining: {{ attempts }}</p>
+      <button mat-raised-button [matBadge]="attempts > 0 ?  attempts : null"
+              color="accent"
+              (click)="skip()"
+              [disabled]="disableButtons">Skip</button>
     </ng-container>
   </div>
 </div>

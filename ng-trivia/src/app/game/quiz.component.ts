@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { gameOver, startQuiz } from './store/quiz.actions';
-import { selectIfGameIsOver } from './store/quiz.selectors';
+import { startQuiz } from './store/quiz.actions';
+import { selectStatus } from './store/quiz.selectors';
 import { ActivatedRoute, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-quiz',
@@ -12,7 +13,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class QuizComponent implements OnInit {
 
 
-  constructor(private store: Store, private router: Router, private route: ActivatedRoute) {
+  constructor(private store: Store,
+              private router: Router,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -21,11 +24,11 @@ export class QuizComponent implements OnInit {
   }
 
   subscribeOnGameOver(): void {
-    const subs$ = this.store.select(selectIfGameIsOver).subscribe((res) => {
-      if (res) {
+    const subs$ = this.store.select(selectStatus)
+      .pipe(filter(status => status === 'GAME_OVER'))
+      .subscribe(() => {
         subs$.unsubscribe();
-        this.router.navigate(['game-over'], { relativeTo: this.route }).then(() => this.store.dispatch(gameOver()));
-      }
-    });
+        this.router.navigate(['game-over'], { relativeTo: this.route });
+      });
   }
 }

@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { interval, Subscription } from 'rxjs';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { interval, Subject, Subscription } from 'rxjs';
+import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { skipQuestion } from '../store/quiz.actions';
-import { selectQuestionNumberOf } from '../store/quiz.selectors';
+import { timeRunOut } from '../store/quiz.actions';
+import { selectStatus } from '../store/quiz.selectors';
 
 @Component({
   selector: 'app-quiz-timer',
@@ -16,17 +16,22 @@ export class QuizTimerComponent implements OnInit, OnDestroy {
 
   timeLeft = 20;
 
+  stopTimer$: Subject<boolean> = new Subject<boolean>();
+
   constructor(private  store: Store) {
   }
 
   ngOnInit(): void {
-    const s$ = this.store.select(selectQuestionNumberOf).pipe(
+    const interval$ = interval(1000).pipe(takeUntil(this.stopTimer$));
+    const s$ = this.store.select(selectStatus).pipe(
+      tap(status => status !== 'TIMER' && this.stopTimer$.next(true)),
+      filter(status => status === 'TIMER'),
       tap(() => this.timeLeft = 20),
-      switchMap(() => interval(1000)),
+      switchMap(() => interval$),
       map(() => --this.timeLeft),
       filter((v) => v === 0)
     ).subscribe(() => {
-      this.store.dispatch(skipQuestion());
+      this.store.dispatch(timeRunOut());
     });
     this.subs$.add(s$);
   }
